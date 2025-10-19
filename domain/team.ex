@@ -8,7 +8,17 @@ defmodule Team do
         id=generar_id()
         %Team{nombre: nombre, participantes: participantes, id: id}
         |> TeamRepository.saveTeam()
+        {:ok, "El equipo #{nombre} ha sido creado con ID #{id}" }
       {:error, msg} -> {:error, msg}
+      end
+  end
+
+  def listarTeams() do
+    teams=TeamRepository.listarTeams()
+    if teams== [] do
+      "No hay equipos registrados."
+    else
+    Enum.map(teams,fn infoTeam -> "ID: #{infoTeam.id}, Nombre: #{infoTeam.nombre}, Participantes: #{Enum.join(infoTeam.participantes, ", ")}"end)
   end
 end
 
