@@ -6,7 +6,7 @@ defmodule Team do
     case validacion do
       {:ok, _msg} ->
         id=generar_id()
-        %Team{nombre: nombre, participantes: participantes, id: id}
+        %Team{nombre: nombre, participantes: participantes, id: "#{id}TM"}
         |> TeamRepository.saveTeam()
         {:ok, "El equipo #{nombre} ha sido creado con ID #{id}" }
       {:error, msg} -> {:error, msg}

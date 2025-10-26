@@ -6,7 +6,7 @@ defmodule Usuario do
     |> case do
       true -> {:error, "El usuario con email #{email} ya existe."}
       false -> id=generar_id()
-      %Usuario{nombre: nombre, email: email, contrasena: contrasena, id: "#{id}AB"}
+      %Usuario{nombre: nombre, email: email, contrasena: contrasena, id: "#{id}US"}
       |> UsuarioRepository.saveUsuario()
       {:ok, "El usuario #{nombre} ha sido creado con ID #{id}"}
     end

@@ -2,9 +2,6 @@ defmodule Main do
   alias CheckTeam
   alias TeamRepository
   alias Team
-  Path.wildcard("**/*.ex")
-|> Enum.each(&Code.compile_file/1)
-
 
   def main do
     IO.puts("Bienvenido al sistema de la hackaton ingrese sesion.\n")

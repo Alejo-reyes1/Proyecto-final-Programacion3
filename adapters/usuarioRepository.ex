@@ -2,7 +2,8 @@ defmodule UsuarioRepository do
   @archivo "usuarios.csv"
 
   def saveUsuario(%{nombre: nombre, email: email, contrasena: contrasena, id: id}) do
-    File.write(@archivo, "#{nombre},#{email},#{contrasena},#{id}\n", [:append])
+    header= "nombre,email,contrasena,id\n"
+    File.write(@archivo,header<> "#{nombre},#{email},#{contrasena},#{id}\n", [:append])
   end
 
   def listarUsuarios() do
