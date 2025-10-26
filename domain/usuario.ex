@@ -12,9 +12,20 @@ defmodule Usuario do
     end
   end
 
+  def autenticar_usuario(email, contrasena) do
+    ValidacionesUsuario.validar_usuario(email,contrasena)
+    |> case do
+      {:ok, usuario} -> {:ok, usuario}
+      {:error, error_msg} -> {:error, error_msg}
+    end
+  end
+
 
   defp generar_id do
-    :erlang.unique_integer([:positive, :monotonic])
-    |> Integer.to_string()
+    UsuarioRepository.listarUsuarios()
+    |> case do
+      [] -> 1
+      usuarios -> Enum.max(usuarios)+1
+    end
   end
 end

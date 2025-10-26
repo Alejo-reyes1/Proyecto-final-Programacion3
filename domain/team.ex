@@ -23,6 +23,10 @@ defmodule Team do
 end
 
   defp generar_id do
-    :erlang.unique_integer([:positive, :monotonic])
+    TeamRepository.listarTeams()
+    |> case do
+      [] -> 1
+      teams -> Enum.max(teams)+1
+    end
   end
 end

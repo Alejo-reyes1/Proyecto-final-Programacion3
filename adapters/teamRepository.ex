@@ -13,10 +13,11 @@ defmodule TeamRepository do
     |> case do
       {:ok, contenido} ->
         String.split(contenido , "\n",  trim: true)
-        |>Enum.map(fn fila ->[id, nombre , miembros]=String.split(fila,",")
+        |>Enum.map(fn fila ->[id,nombre ,miembros]=String.split(fila,",")
           participantes=String.split(miembros,";")
           %Team{id: id, nombre: nombre, participantes: participantes}
         end)
+        |> Enum.drop(1)
       {:error, _reason} -> []
     end
   end

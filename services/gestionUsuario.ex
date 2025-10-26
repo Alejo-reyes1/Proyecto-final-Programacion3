@@ -9,7 +9,12 @@ defmodule GestionUsuario do
   end
 
   def iniciar_sesion(email, contrasena) do
+    Usuario.autenticar_usuario(email, contrasena)
+    |> case do
+      {:ok, usuario} -> {:ok, usuario}
+      {:error, error_msg} -> {:error, error_msg}
+    end
 
   end
-
+  
 end

@@ -8,4 +8,16 @@ defmodule ValidacionesUsuario do
       false -> false
     end
   end
+
+  def validar_usuario(email, contrasena) do
+    UsuarioRepository.listarUsuarios()
+    |> Enum.find( fn usuario ->
+      String.trim(usuario.email) == String.trim(email) and
+      String.trim(usuario.contrasena) == String.trim(contrasena)
+    end)
+    |> case do
+      nil -> {:error, "Credenciales invalidas"}
+      usuario -> {:ok, usuario}
+    end
+  end
 end
