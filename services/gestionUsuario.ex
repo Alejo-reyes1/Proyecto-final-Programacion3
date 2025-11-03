@@ -1,10 +1,14 @@
 defmodule GestionUsuario do
 
   def crear_usuario(nombre, email,contrasena) do
-    Usuario.create_usuario(nombre, email,contrasena)
-    |> case do
-      {:ok, mensaje } -> {:ok, mensaje }
-      {:error, error_msg} -> {:error, error_msg}
+    if String.contains?(email,"@") and String.contains?(email,".") do
+      Usuario.create_usuario(nombre, email,contrasena)
+      |> case do
+        {:ok, mensaje } -> {:ok, mensaje }
+        {:error, error_msg} -> {:error, error_msg}
+    end
+    else
+      {:error, "El email proporcionado no es valido."}
     end
   end
 
@@ -16,5 +20,5 @@ defmodule GestionUsuario do
     end
 
   end
-  
+
 end

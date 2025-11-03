@@ -31,6 +31,7 @@ defmodule Main do
         iniciar_sesion()
       {:error, error_msg} ->
         IO.puts("Error al crear el usuario: #{error_msg}")
+        main()
     end
   end
 
