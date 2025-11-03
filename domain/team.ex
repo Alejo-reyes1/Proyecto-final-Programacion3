@@ -1,12 +1,12 @@
 defmodule Team do
-  defstruct [:nombre, :participantes,:id]
+  defstruct [:nombre, :participantes,:id, :estado]
 
   def createTeam(nombre,participantes) do
     validacion=CheckTeam.checkTeamName(nombre)
     case validacion do
       {:ok, _msg} ->
         id=generar_id()
-        %Team{nombre: nombre, participantes: participantes, id: "#{id}TM"}
+        %Team{nombre: nombre, participantes: participantes, id: "#{id}TM", estado: "activo"}
         |> TeamRepository.saveTeam()
         {:ok, "El equipo #{nombre} ha sido creado con ID #{id}" }
       {:error, msg} -> {:error, msg}
@@ -18,7 +18,7 @@ defmodule Team do
     if teams== [] do
       "No hay equipos registrados."
     else
-    Enum.map(teams,fn infoTeam -> "ID: #{infoTeam.id}, Nombre: #{infoTeam.nombre}, Participantes: #{Enum.join(infoTeam.participantes, ", ")}"end)
+    Enum.map(teams,fn infoTeam -> "ID: #{infoTeam.id}, Nombre: #{infoTeam.nombre}, Participantes: #{Enum.join(infoTeam.participantes, ", ")}, Estado: #{infoTeam.estado}"end)
   end
 end
 

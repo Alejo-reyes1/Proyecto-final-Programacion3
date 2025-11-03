@@ -1,2 +1,2 @@
-id,nombre,participantes
-1TM,EquipoPrueba,juan;pedro
+id,nombre,participantes,estado
+1TM,EquipoPrueba,juan;pedro,activo
