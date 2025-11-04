@@ -2,9 +2,6 @@ defmodule Main do
   alias CheckTeam
   alias TeamRepository
   alias Team
-  def prueba do
-    IO.inspect(UsuarioRepository.listarUsuarios(), label: "Usuarios cargados")
-  end
 
   def run do
     IO.puts("Bienvenido al sistema de la hackaton.")
@@ -21,9 +18,9 @@ defmodule Main do
     end
   end
   defp crear_usuario() do
-    nombre= IO.gets("Ingrese su nombre: ") |> String.trim()
-    email= IO.gets("Ingrese su email: ") |> String.trim()
-    contrasena= IO.gets("Ingrese su contrasena: ") |> String.trim()
+    nombre= IO.gets("Ingrese su nombre: ") |> String.trim() |> String.downcase()
+    email= IO.gets("Ingrese su email: ") |> String.trim() |> String.downcase()
+    contrasena= IO.gets("Ingrese su contrasena: ") |> String.trim() |> String.downcase()
     GestionUsuario.crear_usuario(nombre, email, contrasena)
     |> case do
       {:ok, mensaje} ->
@@ -37,8 +34,8 @@ defmodule Main do
 
   defp iniciar_sesion() do
     IO.puts("Bienvenido, por favor inicie sesion.")
-    email= IO.gets ("Ingrese su email:") |> String.trim()
-    contrasena= IO.gets ("Ingrese su contrasena:") |> String.trim()
+    email= IO.gets ("Ingrese su email:") |> String.trim() |> String.downcase()
+    contrasena= IO.gets ("Ingrese su contrasena:") |> String.trim() |> String.downcase()
     GestionUsuario.iniciar_sesion(email,contrasena)
     |> case do
       {:ok, usuario} ->
@@ -62,9 +59,14 @@ defmodule Main do
   defp ejecutar_comando("/create team", usuario) do
     nombre= IO.gets("Ingrese el nombre del equipo: ") |> String.trim() |> String.downcase()
     tema=IO.gets("Ingrese el tema del equipo: ") |> String.trim() |> String.downcase()
-    participantes= [usuario.nombre]
+    participantes=usuario
     GestionTeams.createTeam(nombre,participantes,tema)
-    |>IO.puts()
+    |> case do
+      {:ok, mensaje} ->
+        IO.puts("Equipo creado exitosamente: #{mensaje}")
+      {:error, error_msg} ->
+        IO.puts("Error al crear el equipo: #{error_msg}")
+    end
     mostrar_menu(usuario)
   end
 
