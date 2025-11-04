@@ -1,7 +1,7 @@
 defmodule GestionTeams do
 
-  def createTeam(nombre, participantes) do
-    Team.createTeam(nombre, participantes)
+  def createTeam(nombre, participantes,tema) do
+    Team.createTeam(nombre, participantes,tema)
     |> case do
       {:ok, msg} -> msg
       {:error, msg} -> "Error al crear el equipo: #{msg}"

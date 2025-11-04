@@ -65,11 +65,11 @@ defmodule Main do
   defp ejecutar_comando("/join team") do
   end
 
-  defp datos_prueba() do
-     equipo1=GestionTeams.createTeam("EquipoPrueba", ["juan", "pedro"])
-    equipo2=GestionTeams.createTeam("EquipoPrueba", ["ana", "maria"])
+  def datos_prueba() do
+     equipo1=GestionTeams.createTeam("EquipoPrueba", ["juan", "pedro"],"TemaPrueba")
+    equipo2=GestionTeams.createTeam("EquipoPrueba", ["ana", "maria"],"OtroTema")
     IO.inspect(equipo1)
     IO.inspect(equipo2)
   end
 end
-Main.main()
+Main.datos_prueba()

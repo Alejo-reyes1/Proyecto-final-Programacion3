@@ -15,7 +15,7 @@ defmodule CheckTeam do
     case File.read(@archivo) do
       {:ok, contenido} ->
         String.split(contenido, "\n", trim: true)
-        |> Enum.map(fn linea -> [_,nombre,_,_]=String.split(linea, ",") ; nombre end)
+        |> Enum.map(fn linea -> [_,nombre,_,_,_]=String.split(linea, ",") ; nombre end)
         |> Enum.drop(1)
       {:error, _reason} -> []
     end
