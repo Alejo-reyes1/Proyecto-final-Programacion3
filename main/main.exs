@@ -78,9 +78,19 @@ defmodule Main do
   defp ejecutar_comando("/teams", usuario) do
     GestionTeams.listarTeams()
     |> Enum.each(fn team_info -> IO.puts(team_info) end)
+    mostrar_menu(usuario)
   end
 
   defp ejecutar_comando("/join team", usuario ) do
+    IO.gets("Ingrese el nombre del equipo al que desea unirse: ") |> String.trim() |> String.downcase()
+    |> GestionTeams.asociar_team_usuario(usuario)
+    |> case do
+      {:ok, mensaje} ->
+        IO.puts("Exito: #{mensaje}")
+      {:error, error_msg} ->
+        IO.puts("Error al unirse al equipo: #{error_msg}")
+    end
+    mostrar_menu(usuario)
   end
 
   def datos_prueba() do
