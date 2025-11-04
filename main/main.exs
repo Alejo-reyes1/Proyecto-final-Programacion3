@@ -6,7 +6,7 @@ defmodule Main do
     IO.inspect(UsuarioRepository.listarUsuarios(), label: "Usuarios cargados")
   end
 
-  def main do
+  def run do
     IO.puts("Bienvenido al sistema de la hackaton.")
     IO.puts("1. Iniciar sesion")
     IO.puts("2. Crear usuario")
@@ -17,7 +17,7 @@ defmodule Main do
       "2" -> crear_usuario()
       "3" -> IO.puts("Saliendo del sistema. ¡Hasta luego!")
       _-> IO.puts("Opcion invalida")
-      main()
+      run()
     end
   end
   defp crear_usuario() do
@@ -31,11 +31,12 @@ defmodule Main do
         iniciar_sesion()
       {:error, error_msg} ->
         IO.puts("Error al crear el usuario: #{error_msg}")
-        main()
+        run()
     end
   end
 
   defp iniciar_sesion() do
+    IO.puts("Bienvenido, por favor inicie sesion.")
     email= IO.gets ("Ingrese su email:") |> String.trim()
     contrasena= IO.gets ("Ingrese su contrasena:") |> String.trim()
     GestionUsuario.iniciar_sesion(email,contrasena)
@@ -45,7 +46,7 @@ defmodule Main do
         mostrar_menu(usuario)
       {:error, error_msg} ->
         IO.puts("Error al iniciar sesion: #{error_msg}")
-        main()
+        run()
     end
   end
 
@@ -53,16 +54,31 @@ defmodule Main do
     IO.puts("Comandos disponibles:")
     IO.puts("/teams - Listar todos los equipos")
     IO.puts("/join team - Unirse a un equipo")
-    comando = IO.gets("Ingrese el comando: ") |> String.trim()
-    ejecutar_comando(comando)
+    IO.puts("/create team - Crear un nuevo equipo\n/exit - Salir del sistema")
+    comando = IO.gets("Ingrese el comando: ") |> String.trim() |> String.downcase()
+    ejecutar_comando(comando, usuario)
   end
 
-  defp ejecutar_comando("/teams") do
+  defp ejecutar_comando("/create team", usuario) do
+    nombre= IO.gets("Ingrese el nombre del equipo: ") |> String.trim() |> String.downcase()
+    tema=IO.gets("Ingrese el tema del equipo: ") |> String.trim() |> String.downcase()
+    participantes= [usuario.nombre]
+    GestionTeams.createTeam(nombre,participantes,tema)
+    |>IO.puts()
+    mostrar_menu(usuario)
+  end
+
+  defp ejecutar_comando("/exit", _usuario) do
+    IO.puts("Saliendo del sistema. ¡Hasta luego!")
+    run()
+  end
+
+  defp ejecutar_comando("/teams", usuario) do
     GestionTeams.listarTeams()
     |> Enum.each(fn team_info -> IO.puts(team_info) end)
   end
 
-  defp ejecutar_comando("/join team") do
+  defp ejecutar_comando("/join team", usuario ) do
   end
 
   def datos_prueba() do
@@ -72,4 +88,4 @@ defmodule Main do
     IO.inspect(equipo2)
   end
 end
-Main.datos_prueba()
+Main.run()

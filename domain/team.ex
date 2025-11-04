@@ -24,9 +24,11 @@ end
 
   defp generar_id do
     TeamRepository.listarTeams()
-    |> case do
+    |>case do
       [] -> 1
-      teams -> Enum.max(teams)+1
+      teams -> Enum.reduce(teams, 0, fn team, acc ->
+        String.replace(team.id,"TM","") |>String.to_integer() |> max(acc)
+      end)+1
     end
   end
 end

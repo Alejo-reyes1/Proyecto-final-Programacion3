@@ -4,7 +4,11 @@ defmodule TeamRepository do
   def saveTeam(%{nombre: nombre, participantes: participantes,tema: tema, id: id, estado: estado}) do
     header= "id,nombre,participantes,tema,estado\n"
     miembros=Enum.join(participantes, ";")
-    File.write(@archivo,header <> "#{id},#{nombre},#{miembros},#{tema},#{estado}\n", [:append])
+    case File.exists?(@archivo) do
+      true -> File.write(@archivo,"#{id},#{nombre},#{miembros},#{tema},#{estado}\n", [:append])
+      false -> File.write(@archivo,header <> "#{id},#{nombre},#{miembros},#{tema},#{estado}\n", [:append])
+    end
+
 
   end
 
@@ -13,7 +17,7 @@ defmodule TeamRepository do
     |> case do
       {:ok, contenido} ->
         String.split(contenido , "\n",  trim: true)
-        |>Enum.map(fn fila ->[id,nombre,tema,miembros,estado]=String.split(fila,",")
+        |>Enum.map(fn fila ->[id,nombre,miembros,tema,estado]=String.split(fila,",")
           participantes=String.split(miembros,";")
           %Team{id: id, nombre: nombre, participantes: participantes,tema: tema, estado: estado}
         end)

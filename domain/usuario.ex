@@ -23,9 +23,11 @@ defmodule Usuario do
 
   defp generar_id do
     UsuarioRepository.listarUsuarios()
-    |> case do
+    |>case  do
       [] -> 1
-      usuarios -> Enum.max(usuarios)+1
+      usuarios -> Enum.reduce(usuarios, 0, fn usuario, acc ->
+        String.replace(usuario.id,"US","") |>String.to_integer() |> max(acc)
+      end)+1
     end
   end
 end
