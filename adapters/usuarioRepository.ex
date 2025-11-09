@@ -40,4 +40,9 @@ defmodule UsuarioRepository do
       {:error, _reason} -> []
     end
   end
+
+  def obtener_usuario_id(id_buscar) do
+    listarUsuarios()
+    |> Enum.find(fn usuario -> usuario.id == id_buscar end)
+  end
 end

@@ -82,8 +82,9 @@ defmodule Main do
   end
 
   defp ejecutar_comando("/join team", usuario ) do
-    IO.gets("Ingrese el nombre del equipo al que desea unirse: ") |> String.trim() |> String.downcase()
-    |> GestionTeams.asociar_team_usuario(usuario)
+    nombre_team=IO.gets("Ingrese el nombre del equipo al que desea unirse: ") |> String.trim() |> String.downcase()
+    GestionTeams.asociar_usuario_team(nombre_team, usuario)
+    GestionTeams.asociar_team_usuario(nombre_team,usuario)
     |> case do
       {:ok, mensaje} ->
         IO.puts("Exito: #{mensaje}")

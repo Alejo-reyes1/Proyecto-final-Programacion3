@@ -8,8 +8,23 @@ defmodule TeamRepository do
       true -> File.write(@archivo,"#{id},#{nombre},#{miembros},#{tema},#{estado}\n", [:append])
       false -> File.write(@archivo,header <> "#{id},#{nombre},#{miembros},#{tema},#{estado}\n", [:append])
     end
+  end
 
-
+  def actualizar_team(team_actualizado) do
+    teams = listarTeams()
+    nuevos_teams =
+      Enum.map(teams, fn team ->
+        if team.id == team_actualizado.id, do: team_actualizado, else: team
+      end)
+    header = "id,nombre,participantes,tema,estado\n"
+    contenido =
+      nuevos_teams
+      |> Enum.map(fn t ->
+        miembros = Enum.join(t.participantes || [], ";")
+        "#{t.id},#{t.nombre},#{miembros},#{t.tema},#{t.estado}"
+      end)
+      |> Enum.join("\n")
+    File.write(@archivo, header <> contenido <> "\n")
   end
 
   def listarTeams() do

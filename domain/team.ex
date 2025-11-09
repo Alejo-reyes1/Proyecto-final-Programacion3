@@ -18,7 +18,13 @@ defmodule Team do
     if teams== [] do
       "No hay equipos registrados."
     else
-    Enum.map(teams,fn infoTeam -> "ID: #{infoTeam.id}, Nombre: #{infoTeam.nombre},Tema: #{infoTeam.tema} ,Participantes: #{Enum.join(infoTeam.participantes, ", ")}, Estado: #{infoTeam.estado}"end)
+    Enum.map(teams,fn infoTeam ->
+      pariticipantes_nombres= Enum.map(infoTeam.participantes, fn participante_id ->
+        usuario=UsuarioRepository.obtener_usuario_id(participante_id)
+        usuario.nombre
+      end)
+      "ID: #{infoTeam.id}, Nombre: #{infoTeam.nombre},Tema: #{infoTeam.tema} ,Participantes: #{Enum.join(pariticipantes_nombres, ", ")}, Estado: #{infoTeam.estado}"
+    end)
   end
 end
 
