@@ -2,6 +2,7 @@ defmodule Main do
   alias CheckTeam
   alias TeamRepository
   alias Team
+  alias Chat
 
   def run do
     IO.puts("Bienvenido al sistema de la hackaton.")
@@ -51,6 +52,7 @@ defmodule Main do
     IO.puts("Comandos disponibles:")
     IO.puts("/teams - Listar todos los equipos")
     IO.puts("/join team - Unirse a un equipo")
+    IO.puts("/chat - Acceder al chat de un equipo")
     IO.puts("/create team - Crear un nuevo equipo\n/exit - Salir del sistema")
     comando = IO.gets("Ingrese el comando: ") |> String.trim() |> String.downcase()
     ejecutar_comando(comando, usuario)
@@ -91,6 +93,27 @@ defmodule Main do
       {:error, error_msg} ->
         IO.puts("Error al unirse al equipo: #{error_msg}")
     end
+    mostrar_menu(usuario)
+  end
+
+  defp ejecutar_comando("/chat", usuario) do
+    nombre_team=IO.gets("Ingrese el nombre del equipo: ") |> String.trim() |> String.downcase()
+    case GestionUsuario.usuario_en_equipo(usuario, nombre_team) do
+      {:ok, _msg} ->
+        id_team=TeamRepository.obtener_id_por_nombre(nombre_team)
+        spawn(fn -> NodoServidor.iniciar_servidor_chat(id_team) end)
+        :timer.sleep(1000) # Esperar a que el servidor inicie
+        IO.puts("Acceso concedido al chat del equipo #{nombre_team}.")
+        NodoCliente.iniciar_chat(id_team, usuario)
+        mostrar_menu(usuario)
+      {:error, msg} ->
+        IO.puts("Acceso denegado: #{msg}")
+        mostrar_menu(usuario)
+    end
+  end
+
+  defp ejecutar_comando(_, usuario) do
+    IO.puts("Comando no reconocido. Por favor, intente de nuevo.")
     mostrar_menu(usuario)
   end
 

@@ -9,6 +9,20 @@ defmodule ValidacionesUsuario do
     end
   end
 
+  def usuario_en_team(usuario, nombre_team) do
+    teams = TeamRepository.listarTeams()
+    team = Enum.find(teams, fn t -> String.trim(t.nombre) == String.trim(nombre_team) end)
+    if team do
+      if usuario.id in team.participantes do
+        {:ok, "El usuario pertenece al equipo #{nombre_team}."}
+      else
+        {:error, "El usuario no pertenece al equipo #{nombre_team}."}
+      end
+    else
+      {:error, "El equipo #{nombre_team} no existe."}
+    end
+  end
+
   def validar_usuario(email, contrasena) do
     UsuarioRepository.listarUsuarios()
     |> Enum.find( fn usuario ->

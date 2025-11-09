@@ -40,4 +40,13 @@ defmodule TeamRepository do
       {:error, _reason} -> []
     end
   end
+
+  def obtener_id_por_nombre(nombre_team) do
+    listarTeams()
+    |> Enum.find(fn team -> team.nombre == nombre_team end)
+    |> case do
+      nil -> nil
+      team -> team.id
+    end
+  end
 end
