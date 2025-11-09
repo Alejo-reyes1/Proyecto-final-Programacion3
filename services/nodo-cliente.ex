@@ -12,7 +12,7 @@ defmodule NodoCliente do
       spawn(fn ->
         send({@nombre_proceso, nodo_servidor}, {:nuevo_cliente, self()})
         :timer.sleep(500) # Esperar a que el servidor registre al cliente
-        esperar_mensajes()
+        esperar_mensajes(usuario.nombre)
       end)
       IO.puts("Puedes empezar a enviar mensajes. Escribe '/exit' para salir del chat.")
       escribir_mensajes(id_team, usuario.nombre)
@@ -27,18 +27,20 @@ defmodule NodoCliente do
     Node.set_cookie(@cookie)
   end
 
-  defp esperar_mensajes() do
+  defp esperar_mensajes(nombre_usuario) do
     receive do
       {:mensaje, emisor, mensaje} ->
-        IO.puts("[#{emisor}]: #{mensaje}")
-        esperar_mensajes()
+        if emisor != nombre_usuario do
+          IO.puts(">>[#{emisor}]: #{mensaje}")
+        end
+        esperar_mensajes(nombre_usuario)
 
       :fin ->
         IO.puts("El servidor finalizó la conexión.")
 
       otro ->
         IO.puts("Mensaje desconocido: #{inspect(otro)}")
-        esperar_mensajes()
+        esperar_mensajes(nombre_usuario)
     end
   end
 

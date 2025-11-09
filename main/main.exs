@@ -147,10 +147,8 @@ defmodule Main do
   end
 
   def datos_prueba() do
-     equipo1=GestionTeams.createTeam("EquipoPrueba", ["juan", "pedro"],"TemaPrueba")
-    equipo2=GestionTeams.createTeam("EquipoPrueba", ["ana", "maria"],"OtroTema")
+     equipo1=GestionTeams.createTeam("EquipoPrueba",%Usuario{id: "1US"},"TemaPrueba")
     IO.inspect(equipo1)
-    IO.inspect(equipo2)
   end
 end
 Main.run()

@@ -1,5 +1,5 @@
 defmodule TeamRepository do
-  @archivo "teams.csv"
+  @archivo "data/repository/teams.csv"
 
   def saveTeam(%{nombre: nombre, participantes: participantes,tema: tema, id: id, estado: estado}) do
     header= "id,nombre,participantes,tema,estado\n"

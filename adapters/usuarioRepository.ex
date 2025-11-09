@@ -1,5 +1,5 @@
 defmodule UsuarioRepository do
-  @archivo "usuarios.csv"
+  @archivo "data/repositoryusuarios.csv"
 
     def saveUsuario(%{nombre: nombre, email: email, contrasena: contrasena, id: id, teams_id: []}) do
       header= "nombre,email,contrasena,id,teams_id\n"
