@@ -5,6 +5,7 @@ defmodule Main do
   alias Chat
 
   def run do
+    limpiar_consola()
     IO.puts("Bienvenido al sistema de la hackaton.")
     IO.puts("1. Iniciar sesion")
     IO.puts("2. Crear usuario")
@@ -19,6 +20,7 @@ defmodule Main do
     end
   end
   defp crear_usuario() do
+    limpiar_consola()
     nombre= IO.gets("Ingrese su nombre: ") |> String.trim() |> String.downcase()
     email= IO.gets("Ingrese su email: ") |> String.trim() |> String.downcase()
     contrasena= IO.gets("Ingrese su contrasena: ") |> String.trim() |> String.downcase()
@@ -26,14 +28,17 @@ defmodule Main do
     |> case do
       {:ok, mensaje} ->
         IO.puts("Usuario creado exitosamente: #{mensaje}")
+        :timer.sleep(2000)
         iniciar_sesion()
       {:error, error_msg} ->
         IO.puts("Error al crear el usuario: #{error_msg}")
+        :timer.sleep(2000)
         run()
     end
   end
 
   defp iniciar_sesion() do
+    limpiar_consola()
     IO.puts("Bienvenido, por favor inicie sesion.")
     email= IO.gets ("Ingrese su email:") |> String.trim() |> String.downcase()
     contrasena= IO.gets ("Ingrese su contrasena:") |> String.trim() |> String.downcase()
@@ -41,14 +46,19 @@ defmodule Main do
     |> case do
       {:ok, usuario} ->
         IO.puts("Bienvenido, #{usuario.nombre}!")
+        :timer.sleep(2000)
+        limpiar_consola()
         mostrar_menu(usuario)
       {:error, error_msg} ->
         IO.puts("Error al iniciar sesion: #{error_msg}")
+        :timer.sleep(2000)
+        limpiar_consola()
         run()
     end
   end
 
   defp mostrar_menu(usuario) do
+    limpiar_consola()
     IO.puts("Comandos disponibles:")
     IO.puts("/teams - Listar todos los equipos")
     IO.puts("/join team - Unirse a un equipo")
@@ -59,6 +69,7 @@ defmodule Main do
   end
 
   defp ejecutar_comando("/create team", usuario) do
+    limpiar_consola()
     nombre= IO.gets("Ingrese el nombre del equipo: ") |> String.trim() |> String.downcase()
     tema=IO.gets("Ingrese el tema del equipo: ") |> String.trim() |> String.downcase()
     participantes=usuario
@@ -69,7 +80,11 @@ defmodule Main do
       {:error, error_msg} ->
         IO.puts("Error al crear el equipo: #{error_msg}")
     end
-    mostrar_menu(usuario)
+    if String.downcase(IO.gets("Digite ok para salir:")|> String.trim())=="ok" do
+      :timer.sleep(2000)
+      limpiar_consola()
+      mostrar_menu(usuario)
+    end
   end
 
   defp ejecutar_comando("/exit", _usuario) do
@@ -78,12 +93,18 @@ defmodule Main do
   end
 
   defp ejecutar_comando("/teams", usuario) do
+    limpiar_consola()
     GestionTeams.listarTeams()
-    |> Enum.each(fn team_info -> IO.puts(team_info) end)
-    mostrar_menu(usuario)
+    |> Enum.each(fn team_info ->
+      :timer.sleep(500)
+      IO.puts(team_info) end)
+    if String.downcase(IO.gets("Digite ok para salir:")|> String.trim())=="ok" do
+      mostrar_menu(usuario)
+    end
   end
 
   defp ejecutar_comando("/join team", usuario ) do
+    limpiar_consola()
     nombre_team=IO.gets("Ingrese el nombre del equipo al que desea unirse: ") |> String.trim() |> String.downcase()
     GestionTeams.asociar_usuario_team(nombre_team, usuario)
     GestionTeams.asociar_team_usuario(nombre_team,usuario)
@@ -93,10 +114,12 @@ defmodule Main do
       {:error, error_msg} ->
         IO.puts("Error al unirse al equipo: #{error_msg}")
     end
+    :timer.sleep(2000)
     mostrar_menu(usuario)
   end
 
   defp ejecutar_comando("/chat", usuario) do
+    limpiar_consola()
     nombre_team=IO.gets("Ingrese el nombre del equipo: ") |> String.trim() |> String.downcase()
     case GestionUsuario.usuario_en_equipo(usuario, nombre_team) do
       {:ok, _msg} ->
@@ -113,8 +136,13 @@ defmodule Main do
   end
 
   defp ejecutar_comando(_, usuario) do
+    limpiar_consola()
     IO.puts("Comando no reconocido. Por favor, intente de nuevo.")
     mostrar_menu(usuario)
+  end
+
+  defp limpiar_consola do
+    IO.write(IO.ANSI.clear() <> IO.ANSI.home())
   end
 
   def datos_prueba() do
