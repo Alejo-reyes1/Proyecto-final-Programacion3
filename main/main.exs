@@ -131,6 +131,7 @@ defmodule Main do
         mostrar_menu(usuario)
       {:error, msg} ->
         IO.puts("Acceso denegado: #{msg}")
+        :timer.sleep(2000)
         mostrar_menu(usuario)
     end
   end

@@ -8,6 +8,7 @@ defmodule NodoCliente do
     nodo_servidor =String.to_atom("#{id_team}@#{obtener_ip()}")
     if Node.connect(nodo_servidor) do #Nodo servidor
       IO.puts("Conectado al servidor del chat.")
+      HistorialMensajes.mostrar_historial(id_team)
       spawn(fn ->
         send({@nombre_proceso, nodo_servidor}, {:nuevo_cliente, self()})
         :timer.sleep(500) # Esperar a que el servidor registre al cliente
@@ -55,7 +56,7 @@ defmodule NodoCliente do
 
   defp enviar_mensaje(id_team, usuario_nombre, mensaje) do
     nodo_servidor =String.to_atom("#{id_team}@#{obtener_ip()}")
-    send({@nombre_proceso, nodo_servidor}, {:mensaje, usuario_nombre, mensaje})
+    send({@nombre_proceso, nodo_servidor}, {:mensaje, usuario_nombre, mensaje, id_team})
   end
 
 

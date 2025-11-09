@@ -10,8 +10,18 @@ defmodule NodoServidor do
 
   defp iniciar_nodo(id_team) do
     nodo_servidor=String.to_atom("#{id_team}@#{obtener_ip()}")
-    Node.start(nodo_servidor)
-    Node.set_cookie(@cookie)
+    case Node.start(nodo_servidor) do
+    {:ok, _pid} ->
+      Node.set_cookie(@cookie)
+      IO.puts("Nodo iniciado correctamente: #{inspect(Node.self())}")
+
+    {:error, {:already_started, _}} ->
+      Node.set_cookie(@cookie)
+      IO.puts("Nodo ya estaba iniciado: #{inspect(Node.self())}")
+
+    {:error, reason} ->
+      IO.puts("Error al iniciar nodo: #{inspect(reason)}")
+  end
   end
 
   defp loop(clientes) do
@@ -23,7 +33,8 @@ defmodule NodoServidor do
         loop(nuevos_clientes)
 
       # Cuando un cliente envía un mensaje
-      {:mensaje, emisor, mensaje} ->
+      {:mensaje, emisor, mensaje, id_team} ->
+        HistorialMensajes.guardar_mensaje_csv(id_team,emisor,mensaje)
         Enum.each(clientes, fn pid ->
           send(pid, {:mensaje, emisor, mensaje})
         end)
